@@ -41,20 +41,13 @@ jobs:
 
       - name: Rebuild DMGs with signed app
         run: |
-          brew install create-dmg || true
           rm -f dist/*.dmg
-          create-dmg \
-            --volname "SocialSuite OBS Connector" \
-            --window-size 600 400 \
-            --app-drop-link 450 180 \
-            "dist/SocialSuite OBS Connector-1.1.0-arm64.dmg" \
-            "dist/mac-arm64/SocialSuite OBS Connector.app" || \
           hdiutil create -volname "SocialSuite OBS Connector" \
             -srcfolder "dist/mac-arm64/SocialSuite OBS Connector.app" \
-            -ov -format UDZO "dist/SocialSuite OBS Connector-1.1.0-arm64.dmg"
+            -ov -format UDZO "dist/SocialSuite-OBS-Connector-arm64.dmg"
           hdiutil create -volname "SocialSuite OBS Connector" \
             -srcfolder "dist/mac/SocialSuite OBS Connector.app" \
-            -ov -format UDZO "dist/SocialSuite OBS Connector-1.1.0.dmg"
+            -ov -format UDZO "dist/SocialSuite-OBS-Connector-x64.dmg"
 
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
