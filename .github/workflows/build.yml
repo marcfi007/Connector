@@ -34,6 +34,28 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: false
           SKIP_NOTARIZE: true
 
+      - name: Ad-hoc sign (bypass Gatekeeper quarantine)
+        run: |
+          codesign --deep --force --sign - "dist/mac-arm64/SocialSuite OBS Connector.app" 2>/dev/null || true
+          codesign --deep --force --sign - "dist/mac/SocialSuite OBS Connector.app" 2>/dev/null || true
+
+      - name: Rebuild DMGs with signed app
+        run: |
+          brew install create-dmg || true
+          rm -f dist/*.dmg
+          create-dmg \
+            --volname "SocialSuite OBS Connector" \
+            --window-size 600 400 \
+            --app-drop-link 450 180 \
+            "dist/SocialSuite OBS Connector-1.1.0-arm64.dmg" \
+            "dist/mac-arm64/SocialSuite OBS Connector.app" || \
+          hdiutil create -volname "SocialSuite OBS Connector" \
+            -srcfolder "dist/mac-arm64/SocialSuite OBS Connector.app" \
+            -ov -format UDZO "dist/SocialSuite OBS Connector-1.1.0-arm64.dmg"
+          hdiutil create -volname "SocialSuite OBS Connector" \
+            -srcfolder "dist/mac/SocialSuite OBS Connector.app" \
+            -ov -format UDZO "dist/SocialSuite OBS Connector-1.1.0.dmg"
+
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
