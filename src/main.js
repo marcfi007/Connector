@@ -1,5 +1,5 @@
 "use strict";
-const { app, BrowserWindow, ipcMain, safeStorage, nativeTheme } = require("electron");
+const { app, BrowserWindow, ipcMain, safeStorage, nativeTheme, protocol } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { ConnectorService } = require("./connector");
@@ -52,12 +52,12 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
+      webSecurity: false,
     },
   });
 
   mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
   mainWindow.setMenu(null);
-  mainWindow.webContents.openDevTools({ mode: "detach" });
 
   mainWindow.on("closed", () => { mainWindow = null; });
 }
