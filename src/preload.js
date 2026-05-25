@@ -10,4 +10,5 @@ contextBridge.exposeInMainWorld("api", {
   onObsStatus:     (cb) => ipcRenderer.on("obs-status",    (_e, s)  => cb(s)),
   onAuthenticated: (cb) => ipcRenderer.on("authenticated", (_e, id) => cb(id)),
   onAuthFailed:    (cb) => ipcRenderer.on("auth-failed",   (_e, m)  => cb(m)),
+  onErrorMsg:      (cb) => ipcRenderer.on("error-msg",     (_e, m)  => cb(m)),
 });

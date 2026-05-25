@@ -57,6 +57,7 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
   mainWindow.setMenu(null);
+  mainWindow.webContents.openDevTools({ mode: "detach" });
 
   mainWindow.on("closed", () => { mainWindow = null; });
 }
@@ -82,10 +83,11 @@ function send(channel, ...args) {
   mainWindow?.webContents?.send(channel, ...args);
 }
 
-connector.on("relay-status", (s)   => send("relay-status", s));
-connector.on("obs-status",   (s)   => send("obs-status", s));
-connector.on("authenticated", (id) => send("authenticated", id));
-connector.on("auth-failed",  (msg) => send("auth-failed", msg));
+connector.on("relay-status",  (s)   => send("relay-status", s));
+connector.on("obs-status",    (s)   => send("obs-status", s));
+connector.on("authenticated", (id)  => send("authenticated", id));
+connector.on("auth-failed",   (msg) => send("auth-failed", msg));
+connector.on("error-msg",     (msg) => send("error-msg", msg));
 
 // ─── App lifecycle ─────────────────────────────────────────────────────────────
 app.whenReady().then(() => {

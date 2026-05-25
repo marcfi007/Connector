@@ -200,6 +200,10 @@
       setRelay("offline");
     });
 
+    window.api.onErrorMsg(msg => {
+      errorMsg.textContent = "Fehler: " + msg;
+    });
+
     btn.addEventListener("click", async () => {
       if (connected) {
         await window.api.disconnect();

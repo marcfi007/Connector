@@ -100,8 +100,9 @@ class ConnectorService extends EventEmitter {
       this._scheduleReconnect();
     });
 
-    ws.on("error", () => {
+    ws.on("error", (err) => {
       if (ws !== this._relay) return;
+      this.emit("error-msg", err.message || "Verbindungsfehler");
       if (!this._authenticated) this.emit("relay-status", "offline");
     });
 
